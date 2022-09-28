@@ -143,6 +143,7 @@ function parseSettings(doc: DocHandler, options: UserOptions): Settings {
     margin,
     pageBreak: options.pageBreak ?? 'auto',
     rowPageBreak: options.rowPageBreak ?? 'auto',
+    keepWithNext: options.keepWithNext ?? [],
     tableWidth: options.tableWidth ?? 'auto',
     showHead,
     showFoot,

@@ -38,6 +38,7 @@ export interface UserOptions {
   startY?: number | false
   margin?: MarginPaddingInput
   pageBreak?: 'auto' | 'avoid' | 'always'
+  keepWithNext?: number[]
   rowPageBreak?: 'auto' | 'avoid'
   tableWidth?: 'auto' | 'wrap' | number
   showHead?: 'everyPage' | 'firstPage' | 'never' | boolean

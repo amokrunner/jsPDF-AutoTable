@@ -292,7 +292,21 @@ function printFullRow(
   cursor: Pos,
   columns: Column[]
 ) {
-  const remainingSpace = getRemainingPageSpace(doc, table, isLastRow, cursor)
+  let remainingSpace = getRemainingPageSpace(doc, table, isLastRow, cursor)
+
+  // check to see if row keeps with next and if we need to insert a new page
+  const rowIndex = table.body.findIndex((r) => r === row)
+  if (rowIndex > 0 && table.settings.keepWithNext?.includes(rowIndex)) {
+    if (table.body[rowIndex + 1]) {
+      const height = row.getMaxCellHeight(columns)
+      const nextHeight = table.body[rowIndex + 1].getMaxCellHeight(columns)
+      if (height + nextHeight > remainingSpace) {
+        addPage(doc, table, startPos, cursor, columns)
+        remainingSpace = getRemainingPageSpace(doc, table, isLastRow, cursor)
+      }
+    }
+  }
+
   if (row.canEntireRowFit(remainingSpace, columns)) {
     printRow(doc, table, row, cursor, columns)
   } else {

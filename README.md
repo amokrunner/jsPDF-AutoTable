@@ -186,6 +186,7 @@ autoTable(doc, ({
 - `tableLineColor: Color = 200` The table line/border color
 - `horizontalPageBreak: boolean = true` To split/break the table into multiple pages if the given table width exceeds the page width
 - `horizontalPageBreakRepeat: string | number = 'id'` To repeat the given column in the split pages, works when `horizontalPageBreak = true`. The accepted values are column data keys, such as `'id'`, `recordId` or column indexes, such as `0`, `1`.
+- `keepWithNext: [number]` Row indices where the row should be kept on the same page as the following row
 
 `Margin`:
 Either a number or object `{top: number, right: number, bottom: number, left: number}`

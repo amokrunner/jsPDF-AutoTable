@@ -872,7 +872,7 @@ function parseHooks(global, document, current) {
     return result;
 }
 function parseSettings(doc, options) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
     var margin = (0, common_1.parseSpacing)(options.margin, 40 / doc.scaleFactor());
     var startY = (_a = getStartY(doc, options.startY)) !== null && _a !== void 0 ? _a : margin.top;
     var showFoot;
@@ -909,11 +909,12 @@ function parseSettings(doc, options) {
         margin: margin,
         pageBreak: (_g = options.pageBreak) !== null && _g !== void 0 ? _g : 'auto',
         rowPageBreak: (_h = options.rowPageBreak) !== null && _h !== void 0 ? _h : 'auto',
-        tableWidth: (_j = options.tableWidth) !== null && _j !== void 0 ? _j : 'auto',
+        keepWithNext: (_j = options.keepWithNext) !== null && _j !== void 0 ? _j : [],
+        tableWidth: (_k = options.tableWidth) !== null && _k !== void 0 ? _k : 'auto',
         showHead: showHead,
         showFoot: showFoot,
-        tableLineWidth: (_k = options.tableLineWidth) !== null && _k !== void 0 ? _k : 0,
-        tableLineColor: (_l = options.tableLineColor) !== null && _l !== void 0 ? _l : 200,
+        tableLineWidth: (_l = options.tableLineWidth) !== null && _l !== void 0 ? _l : 0,
+        tableLineColor: (_m = options.tableLineColor) !== null && _m !== void 0 ? _m : 200,
         horizontalPageBreak: horizontalPageBreak,
         horizontalPageBreakRepeat: horizontalPageBreakRepeat,
     };
@@ -1744,7 +1745,20 @@ function shouldPrintOnCurrentPage(doc, row, remainingPageSpace, table) {
     return true;
 }
 function printFullRow(doc, table, row, isLastRow, startPos, cursor, columns) {
+    var _a;
     var remainingSpace = getRemainingPageSpace(doc, table, isLastRow, cursor);
+    // check to see if row keeps with next and if we need to insert a new page
+    var rowIndex = table.body.findIndex(function (r) { return r === row; });
+    if (rowIndex > 0 && ((_a = table.settings.keepWithNext) === null || _a === void 0 ? void 0 : _a.includes(rowIndex))) {
+        if (table.body[rowIndex + 1]) {
+            var height = row.getMaxCellHeight(columns);
+            var nextHeight = table.body[rowIndex + 1].getMaxCellHeight(columns);
+            if (height + nextHeight > remainingSpace) {
+                addPage(doc, table, startPos, cursor, columns);
+                remainingSpace = getRemainingPageSpace(doc, table, isLastRow, cursor);
+            }
+        }
+    }
     if (row.canEntireRowFit(remainingSpace, columns)) {
         printRow(doc, table, row, cursor, columns);
     }

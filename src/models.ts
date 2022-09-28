@@ -31,6 +31,7 @@ export interface Settings {
   margin: MarginPadding
   pageBreak: 'auto' | 'avoid' | 'always'
   rowPageBreak: 'auto' | 'avoid'
+  keepWithNext: number[]
   tableWidth: 'auto' | 'wrap' | number
   showHead: 'everyPage' | 'firstPage' | 'never'
   showFoot: 'everyPage' | 'lastPage' | 'never'
